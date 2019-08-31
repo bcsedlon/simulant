@@ -20,11 +20,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 /**
@@ -41,7 +44,7 @@ public class TechEditActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "TechEditActivity";
 
     private Button mButtonGetIX0, mButtonGetIX1, mButtonSetX0, mButtonSetX1, mButtonSave, mButtonBack;
-    private EditText mEditTextX0, mEditTextX1, mEditTextY0, mEditTextY1, mEditTextUnit, mEditTextName;
+    private EditText mEditTextX0, mEditTextX1, mEditTextY0, mEditTextY1, mEditTextUnit, mEditTextName, mEditTextManualX, mEditTextManualY;
     private TextView mTextViewUnit, mTextViewValue, mTextViewI, mTextViewF, mTextViewY0, mTextViewY1;
 
     public double valueInS, valueInI, valueInF;
@@ -58,11 +61,16 @@ public class TechEditActivity extends Activity implements View.OnClickListener {
         valueInI = DataHolder.getInstance().getData(1);
         valueInF = DataHolder.getInstance().getData(1);
 
+        //double i = valueInI;
+        //if(isManualI) {
+        //    i = Double.parseDouble(mEditTextManualI.getText().toString());
+        //}
+        //double y = k * i + d;
+
         double y = k * valueInI + d;
+
         if(mTextViewValue != null) {
             mTextViewValue.setText(String.format("%.2f", y));
-
-            mTextViewI.setText(String.format("%.2f", valueInI));
             mTextViewI.setText(String.format("%.2f", valueInI));
         }
     }
@@ -113,6 +121,49 @@ public class TechEditActivity extends Activity implements View.OnClickListener {
         mEditTextY1 = (EditText) findViewById(R.id.editTextY1);
         mEditTextUnit = (EditText) findViewById(R.id.editTextUnit);
         mEditTextName = (EditText) findViewById(R.id.editTextName);
+
+        mEditTextManualX = (EditText) findViewById(R.id.editTextManualX);
+        mEditTextManualX.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(!mEditTextManualX.hasFocus())
+                    return;
+
+                double x, y;
+                try {
+                    x = Double.parseDouble(mEditTextManualX.getText().toString());
+                }
+                catch (Exception e) {
+                    x = 0.0;
+                }
+                y = k * x + d;
+                mEditTextManualY.setText(String.format("%.2f", y));
+
+            }
+        });
+        mEditTextManualY = (EditText) findViewById(R.id.editTextManualY);
+        mEditTextManualY.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(!mEditTextManualY.hasFocus())
+                    return;
+
+                double x, y;
+                try {
+                    y = Double.parseDouble(mEditTextManualY.getText().toString());
+                }
+                catch (Exception e) {
+                    y = 0.0;
+                }
+                x = (y - d) / k;
+                mEditTextManualX.setText(String.format("%.2f", x));
+
+            }
+        });
 
         mTextViewUnit = (TextView)findViewById(R.id.textViewUnit);
         mTextViewValue = (TextView)findViewById(R.id.textViewValue);
@@ -173,6 +224,7 @@ public class TechEditActivity extends Activity implements View.OnClickListener {
             case R.id.buttonBack:
                 setResult(Activity.RESULT_OK);
                 finish();
+
         }
         updateUI();
     }

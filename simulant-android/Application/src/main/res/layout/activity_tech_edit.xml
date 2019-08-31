@@ -164,7 +164,61 @@
         android:layout_height="1mm" />
     <View
 
-        android:id="@+id/divider"
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1mm" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewManualX"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:padding="6dp"
+            android:textSize="16sp"
+            android:gravity="right"
+            android:text="X" />
+
+        <EditText
+            android:id="@+id/editTextManualX"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".25"
+            android:inputType="numberDecimal"
+            android:text="0.00" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:padding="6dp"
+            android:textSize="16sp"
+            android:gravity="right"
+            android:text="Y" />
+
+        <EditText
+            android:id="@+id/editTextManualY"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".25"
+            android:inputType="numberSigned|numberDecimal"
+            android:text="0.00" />
+
+    </LinearLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1mm" />
+
+    <View
+        android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
@@ -187,10 +241,10 @@
         <EditText
             android:id="@+id/editTextX0"
             android:layout_width="0dp"
-            android:layout_weight=".25"
             android:layout_height="wrap_content"
-            android:text="0.00"
-            android:inputType="numberDecimal" />
+            android:layout_weight=".25"
+            android:inputType="numberDecimal"
+            android:text="0.00" />
 
         <Button
             android:id="@+id/buttonGetIX0"
@@ -264,10 +318,10 @@
         <EditText
             android:id="@+id/editTextY0"
             android:layout_width="0dp"
-            android:layout_weight=".25"
             android:layout_height="wrap_content"
-            android:text="0.00"
-            android:inputType="numberDecimal" />
+            android:layout_weight=".25"
+            android:inputType="numberSigned|numberDecimal"
+            android:text="0.00" />
 
         <TextView
             android:layout_height="wrap_content"
@@ -308,10 +362,10 @@
         <EditText
             android:id="@+id/editTextY1"
             android:layout_width="0dp"
-            android:layout_weight=".25"
             android:layout_height="wrap_content"
-            android:text="0.00"
-            android:inputType="numberDecimal" />
+            android:layout_weight=".25"
+            android:inputType="numberSigned|numberDecimal"
+            android:text="0.00" />
 
         <TextView
             android:layout_height="wrap_content"
