@@ -185,7 +185,7 @@
             android:padding="6dp"
             android:textSize="16sp"
             android:gravity="right"
-            android:text="X" />
+            android:text="X [mA]" />
 
         <EditText
             android:id="@+id/editTextManualX"
@@ -202,7 +202,7 @@
             android:padding="6dp"
             android:textSize="16sp"
             android:gravity="right"
-            android:text="Y" />
+            android:text="Y [UNIT]" />
 
         <EditText
             android:id="@+id/editTextManualY"

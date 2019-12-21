@@ -11,6 +11,14 @@
 #define IN_SENCE_PIN 	A7
 #define IN_BATT_PIN 	A5
 
+#include "FastX9CXXX.h"
+// nastavení čísel projovacích pinů
+#define X9_CS_PIN  9
+#define X9_INC_PIN 10
+#define X9_UD_PIN  11
+// FastX9C102, FastX9C104 a FastX9C503
+FastX9C103 x9;
+
 #include <EEPROM.h>
 #define CALIBRATION_ADDRESS 4
 
@@ -18,7 +26,8 @@
 #include "SoftwareSerial.h"
 SoftwareSerial swSerial(2, 3); // RX, TX
 
-#include <TimerOne.h>
+//#include <TimerOne.h>
+#include "TimerOne.h"
 
 //#include "libraries/PinChangeInt.h"
 //#define NO_PORTB_PINCHANGES
@@ -100,6 +109,7 @@ void setup() {
 	Timer1.initialize(1000000 / 2); // set a timer of length 100000 microseconds (or 0.1 sec - or 10Hz => the led will blink 5 times, 5 cycles of on-and-off, per second)
 	Timer1.attachInterrupt(timerIsr);
 
+	x9.Setup(X9_CS_PIN, X9_UD_PIN, X9_INC_PIN);
 	//attachInterrupt(digitalPinToInterrupt(IN_PULSE_PIN), counterIsr, RISING);
 	//attachPinChangeInterrupt(IN_PULSE_PIN, counterIsr, FALLING);
 }
@@ -134,7 +144,9 @@ void loop() {
 	if(!remoteControl) {
 		pwmOut = analogRead(IN_ADJUST_PIN, SAMPLES) / 4;
 		analogWrite(OUT_I_PIN, pwmOut);
+
 		analogWrite(OUT_PT100_PIN, 255 - pwmOut);
+		x9.JumpToStep(((float)pwmOut / 255.0) * 100.0);
 	}
 
 	if (Serial.available()) {
@@ -150,7 +162,9 @@ void loop() {
 			//int i = Serial.readBytesUntil();
 
 			analogWrite(OUT_I_PIN, pwmOut);
+
 			analogWrite(OUT_PT100_PIN, 255 -pwmOut);
+			x9.JumpToStep(((float)pwmOut / 255.0) * 100);
 
 			Serial.print('>');
 			Serial.println(pwmOut);
@@ -177,8 +191,8 @@ void loop() {
 			//while(swSerial.available())
 			//int i = swSerial.read();
 
-			analogWrite(OUT_I_PIN, pwmOut);
-			analogWrite(OUT_PT100_PIN, pwmOut);
+			//analogWrite(OUT_I_PIN, pwmOut);
+			//analogWrite(OUT_PT100_PIN, pwmOut);
 
 			analogWrite(OUT_I_PIN, pwmOut);
 			analogWrite(OUT_PT100_PIN,255 - pwmOut);
@@ -231,6 +245,8 @@ void loop() {
 		Serial.println(f);
 		Serial.print('B');
 		Serial.println(battIn);
+		Serial.print("R");
+		Serial.print((float)x9.GetEstimatedResistance());
 
 		swSerial.print('S');
 		swSerial.println(senceIn);
@@ -240,5 +256,8 @@ void loop() {
 		swSerial.println(f);
 		swSerial.print('B');
 		swSerial.println(battIn);
+		swSerial.print("R");
+		swSerial.print((float)x9.GetEstimatedResistance());
+
 	}
 }
